@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agriculture Market</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+    :root {
+      --color-primary: #3a7a0a;
+      --color-secondary: #a9d18e;
+      --color-accent: #fab24f;
+      --color-text-dark: #2b2b2b;
+      --color-text-light: #fafafa;
+      --color-shadow: rgba(0, 0, 0, 0.1);
+      --wave-color: #e0f0c0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: var(--color-text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: #f0f8dc;
+      position: relative;
+      padding-bottom: 3rem;
+    }
+
+    /* Animated waves background */
+    #animatedBackground {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .wave {
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      fill: var(--wave-color);
+      opacity: 0.3;
+    }
+    .wave1 {
+      animation-name: moveWave1;
+      animation-duration: 18000ms;
+      transform-origin: center;
+    }
+    .wave2 {
+      animation-name: moveWave2;
+      animation-duration: 12000ms;
+      transform-origin: center;
+    }
+    .wave3 {
+      animation-name: moveWave3;
+      animation-duration: 15000ms;
+      transform-origin: center;
+    }
+
+    @keyframes moveWave1 {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes moveWave2 {
+      0% { transform: translateX(-25%); }
+      100% { transform: translateX(25%); }
+    }
+    @keyframes moveWave3 {
+      0% { transform: translateX(50%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    header {
+      background: rgba(58, 122, 10, 0.85);
+      backdrop-filter: saturate(180%) blur(12px);
+      color: var(--color-text-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 3rem;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    header .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 4px;
+      user-select: none;
+      cursor: default;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--color-text-light);
+      font-weight: 600;
+      margin-left: 2rem;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+    nav a:hover {
+      color: var(--color-accent);
+      text-shadow: 0 0 8px var(--color-accent);
+    }
+
+    main.hero {
+      text-align: center;
+      padding: 5rem 1rem 4rem 1rem;
+      background: rgba(255 255 255 / 0.9);
+      max-width: 900px;
+      margin: 3rem auto 3rem auto;
+      border-radius: 24px;
+      box-shadow: 0 0 50px rgba(58, 122, 10, 0.3);
+    }
+    main.hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 3.2rem;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      letter-spacing: 0.15rem;
+      user-select: none;
+    }
+    main.hero p {
+      font-size: 1.3rem;
+      color: #3c3c3c;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    main.hero button {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--color-text-light);
+      background: var(--color-accent);
+      border: none;
+      border-radius: 50px;
+      padding: 1rem 3rem;
+      cursor: pointer;
+      box-shadow: 0 0 16px var(--color-accent);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    main.hero button:hover {
+      background-color: #dfa631;
+      box-shadow: 0 0 24px #dfa631bb;
+    }
+
+    section.products {
+      max-width: 1200px;
+      margin: 0 auto 4rem auto;
+      padding: 0 1rem;
+    }
+    section.products h2 {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 2.8rem;
+      color: var(--color-primary);
+      text-shadow: 0 0 8px var(--color-secondary);
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 1.5rem 1rem;
+    }
+    article.product-card {
+      background: white;
+      border-radius: 18px;
+      padding: 1rem 1rem 2rem 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+      cursor: default;
+      box-shadow: 0 0 8px var(--color-shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+    article.product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 30px var(--color-accent);
+    }
+    article.product-card img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 10px var(--color-shadow);
+      user-select: none;
+    }
+    article.product-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--color-primary);
+      margin-bottom: 0.4rem;
+      user-select: text;
+    }
+    article.product-card p.description {
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+      height: 2.6rem;
+      overflow: hidden;
+      user-select: text;
+    }
+    article.product-card p.price {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-accent);
+      margin-bottom: 1rem;
+      user-select: text;
+    }
+    article.product-card button.order-btn {
+      font-size: 1rem;
+      font-weight: 600;
+      background: var(--color-primary);
+      color: var(--color-text-light);
+      border: none;
+      border-radius: 24px;
+      padding: 0.55rem 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--color-primary);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    article.product-card button.order-btn:hover {
+      background-color: #276a08;
+      box-shadow: 0 6px 22px #276a0811;
+    }
+
+    /* Contact & footer */
+    section.contact {
+      max-width: 600px;
+      margin: 0 auto 4rem auto;
+      background: rgba(249, 249, 237, 0.95);
+      border-radius: 24px;
+      padding: 2rem 3rem;
+      box-shadow: 0 0 28px var(--color-shadow);
+      user-select: none;
+    }
+    section.contact h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--color-primary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    section.contact form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    section.contact label {
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+    section.contact input,
+    section.contact textarea {
+      font-family: inherit;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--color-secondary);
+      font-size: 1rem;
+      resize: vertical;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    section.contact input:focus,
+    section.contact textarea:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 8px var(--color-accent);
+    }
+    section.contact button {
+      background: var(--color-primary);
+      border: none;
+      color: var(--color-text-light);
+      padding: 1rem 0;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 16px var(--color-primary);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    section.contact button:hover {
+      background: #276a08;
+      box-shadow: 0 0 28px #276a0833;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 1rem 0;
+      color: #666;
+      user-select: none;
+      max-width: 900px;
+      margin: 0 auto 2rem auto;
+    }
+
+    /* Modal styles */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 500;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+    .modal {
+      background-color: #fafaf5;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 100%;
+      padding: 2rem 2.5rem;
+      box-shadow: 0 0 50px rgba(0,0,0,0.2);
+      position: relative;
+      font-family: 'Roboto', sans-serif;
+    }
+    .modal h3 {
+      margin-bottom: 1rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.9rem;
+      color: var(--color-primary);
+    }
+    .modal button.close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--color-primary);
+      cursor: pointer;
+      user-select: none;
+    }
+    .modal label {
+      font-weight: 600;
+      color: var(--color-primary);
+      display: block;
+      margin-bottom: 0.25rem;
+      user-select: none;
+    }
+    .modal input[type="text"],
+    .modal input[type="tel"],
+    .modal textarea,
+    .modal input[type="number"] {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: 12px;
+      border: 2px solid var(--color-secondary);
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+      font-family: inherit;
+      resize: vertical;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .modal input[type="text"]:focus,
+    .modal input[type="tel"]:focus,
+    .modal textarea:focus,
+    .modal input[type="number"]:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 10px var(--color-accent);
+    }
+    .modal button.submit-btn,
+    .modal button.confirm-btn {
+      background-color: var(--color-primary);
+      color: var(--color-text-light);
+      font-weight: 700;
+      font-size: 1.15rem;
+      border: none;
+      border-radius: 40px;
+      padding: 0.85rem 0;
+      cursor: pointer;
+      box-shadow: 0 4px 18px var(--color-primary);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      width: 100%;
+    }
+    .modal button.submit-btn:hover,
+    .modal button.confirm-btn:hover {
+      background-color: #276a08;
+      box-shadow: 0 6px 28px #276a0844;
+    }
+    .modal .step2 {
+      display: none;
+    }
+    .modal .step2.active {
+      display: block;
+    }
+    .confirmation-message {
+      background: #d3f1d8;
+      border: 2px solid #3ca63c;
+      border-radius: 18px;
+      color: #2c5c2c;
+      font-weight: 700;
+      padding: 1rem 2rem;
+      max-width: 450px;
+      margin: 1rem auto 0 auto;
+      text-align: center;
+      box-shadow: 0 0 20px #4ebe4b99;
+      user-select: none;
+      white-space: pre-line;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      main.hero {
+        padding: 4rem 1rem 3rem 1rem;
+        margin: 2rem 1rem;
+      }
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 2rem;
+      }
+      nav a {
+        margin-left: 1rem;
+        font-size: 0.9rem;
+      }
+      section.products {
+        margin: 0 1rem 3rem 1rem;
+      }
+      .product-list {
+        grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+        gap: 1rem;
+      }
+      footer {
+        margin: 0 1rem 1rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg id="animatedBackground" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1440 320">
+    <path class="wave wave1" opacity="0.7" d="M0,192L80,176C160,160,320,128,480,122.7C640,117,800,139,960,149.3C1120,160,1280,160,1360,160L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" />
+    <path class="wave wave2" opacity="0.5" d="M0,288L80,272C160,256,320,224,480,218.7C640,213,800,235,960,240C1120,245,1280,235,1360,229.3L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" />
+    <path class="wave wave3" opacity="0.4" d="M0,320L80,288C160,256,320,192,480,181.3C640,171,800,213,960,229.3C1120,245,1280,235,1360,229.3L1440,224L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" />
+  </svg>
+
+  <header>
+    <div class="logo" aria-label="Agriculture Market Logo">AgriMart</div>
+    <nav aria-label="Primary navigation">
+      <a href="#products" tabindex="0">Products</a>
+      <a href="#contact" tabindex="0">Contact</a>
+    </nav>
+  </header>
+
+  <main class="hero" role="banner" aria-labelledby="main-title subtitle">
+    <h1 id="main-title">Fresh Agriculture Market</h1>
+    <p id="subtitle">Connecting Farmers to Consumers – Freshness Delivered Directly</p>
+    <button onclick="alert('Thank you for visiting! More features coming soon.')">Explore Now</button>
+  </main>
+
+  <section id="products" class="products" aria-label="Featured agricultural products">
+    <h2>Featured Products</h2>
+    <div class="product-list" id="productList">
+
+      <!-- Generate product cards -->
+      <!-- Sample extended with 74 items with varied Indian agriculture products -->
+      <!-- Below are the first 74 product cards -->
+
+      <script>
+        const productData = [
+          {name:"Organic Spinach", price:260, img:"https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=160&q=80", desc:"Crisp and green, plucked fresh from local farms."},
+          {name:"Fresh Red Tomatoes", price:220, img:"https://images.unsplash.com/photo-1590080877777-850c7d870f4a?auto=format&fit=crop&w=160&q=80", desc:"Juicy and ripe, perfect for salads and cooking."},
+          {name:"Premium Wheat", price:320, img:"https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=160&q=80", desc:"High-quality wheat grains sourced from trusted farmers."},
+          {name:"Organic Carrots", price:150, img:"https://images.unsplash.com/photo-1550418290-c1958b7fdd32?auto=format&fit=crop&w=160&q=80", desc:"Sweet and crunchy carrots packed with nutrients."},
+          {name:"Coriander Leaves", price:40, img:"https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=160&q=80", desc:"Fresh and aromatic, ideal for garnishing and flavoring."},
+          {name:"Red Chilies", price:200, img:"https://images.unsplash.com/photo-1582822213429-6c342c7626b3?auto=format&fit=crop&w=160&q=80", desc:"Spicy and fresh, adds bold flavor to dishes."},
+          {name:"Alphonso Mangoes", price:180, img:"https://images.unsplash.com/photo-1506807803488-8eafc15394e2?auto=format&fit=crop&w=160&q=80", desc:"Sweet and juicy, king of Indian mangoes."},
+          {name:"Bananas", price:60, img:"https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=160&q=80", desc:"Fresh and sweet, sourced from local plantations."},
+          {name:"Green Peas", price:120, img:"https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=160&q=80", desc:"Fresh pods rich in fiber and protein."},
+          {name:"Mustard Oil", price:180, img:"https://images.unsplash.com/photo-1590080873429-851c7d880f4a?auto=format&fit=crop&w=160&q=80", desc:"Cold pressed and pure, perfect for cooking."},
+          {name:"Fresh Ginger", price:200, img:"https://images.unsplash.com/photo-1586717792044-cf0d755c7c4e?auto=format&fit=crop&w=160&q=80", desc:"Aromatic with medicinal benefits, freshly harvested."},
+          {name:"Red Onions", price:90, img:"https://images.unsplash.com/photo-1501004318851-1b8bee886aa5?auto=format&fit=crop&w=160&q=80", desc:"Sweet and tangy onions, ideal for cooking and salads."},
+          {name:"Pure Honey", price:350, img:"https://images.unsplash.com/photo-1502136969935-6efed6a96d13?auto=format&fit=crop&w=160&q=80", desc:"Natural and organic honey harvested from wildflower bees."},
+          {name:"Coconuts", price:60, img:"https://images.unsplash.com/photo-1581425918586-7d86d4e2f22f?auto=format&fit=crop&w=160&q=80", desc:"Tropical fresh coconuts ideal for water and cooking."},
+          {name:"Sunflower Seeds", price:160, img:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=160&q=80", desc:"Crunchy seeds with high nutritional value."},
+          {name:"Cauliflower", price:50, img:"https://images.unsplash.com/photo-1524594157366-31a1fa3c6a66?auto=format&fit=crop&w=160&q=80", desc:"Fresh and firm cauliflower heads for your meals."},
+          {name:"Red Apples", price:180, img:"https://images.unsplash.com/photo-1512058564366-c9c9360fd161?auto=format&fit=crop&w=160&q=80", desc:"Sweet and crispy apples fresh from the orchard."},
+          {name:"Green Chillies", price:180, img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=160&q=80", desc:"Fresh and spicy chillies for your dishes."},
+          {name:"Turmeric Root", price:150, img:"https://images.unsplash.com/photo-1590502593747-6a42d836511d?auto=format&fit=crop&w=160&q=80", desc:"Bright yellow turmeric, great for health and cooking."},
+          {name:"Green Cucumbers", price:60, img:"https://images.unsplash.com/photo-1509475826633-fed577a2c71b?auto=format&fit=crop&w=160&q=80", desc:"Crisp and hydrating cucumbers for salads and cooking."},
+        ];
+        // Duplicate and add more items with variation
+        const additionalProducts = [];
+        for(let i=21; i<=74; i++) {
+          // Cycle through base products and slight price variation
+          const base = productData[(i-1) % productData.length];
+          additionalProducts.push({
+            name: base.name + ` #${i}`,
+            price: (base.price * (0.9 + Math.random()*0.3)).toFixed(0),
+            img: base.img,
+            desc: base.desc
+          });
+        }
+        const allProducts = [...productData, ...additionalProducts];
+        const container = document.getElementById('productList');
+        allProducts.forEach((p, idx) => {
+          const prodId = idx+1;
+          const card = document.createElement('article');
+          card.className = 'product-card';
+          card.tabIndex = 0;
+          card.setAttribute('aria-labelledby', `prod${prodId}-title prod${prodId}-price prod${prodId}-desc`);
+          card.dataset.prodId = prodId;
+          card.dataset.prodName = p.name;
+          card.dataset.prodPrice = p.price;
+          card.innerHTML = `
+            <img src="${p.img}" alt="${p.name}" loading="lazy" />
+            <h3 id="prod${prodId}-title">${p.name}</h3>
+            <p class="description" id="prod${prodId}-desc">${p.desc}</p>
+            <p class="price" id="prod${prodId}-price">₹${p.price} / kg</p>
+            <button class="order-btn" aria-label="Order ${p.name}">Order Now</button>
+          `;
+          container.appendChild(card);
+        });
+      </script>
+
+  </section>
+
+  <section id="contact" class="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Contact Us</h2>
+    <form id="contactForm" aria-describedby="contactFormDesc" novalidate>
+      <p id="contactFormDesc" style="font-size:0.85rem; color:#666; margin-bottom:1rem;">
+        Send us your queries or requests and we will get back to you shortly.
+      </p>
+      <label for="nameInput">Name</label>
+      <input type="text" id="nameInput" name="name" placeholder="Your full name" required aria-required="true" autocomplete="name" />
+      <label for="emailInput">Email</label>
+      <input type="email" id="emailInput" name="email" placeholder="your.email@example.com" required aria-required="true" autocomplete="email" />
+      <label for="messageInput">Message</label>
+      <textarea id="messageInput" name="message" rows="4" placeholder="Write your message here..." required aria-required="true"></textarea>
+      <button type="submit" aria-live="polite" aria-atomic="true">Send Message</button>
+    </form>
+  </section>
+
+  <footer role="contentinfo">&copy; 2024 AgriMart. Freshness and Quality Guaranteed.</footer>
+
+  <!-- Order Modal -->
+  <div class="modal-backdrop" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc" tabindex="-1">
+    <div class="modal">
+      <button class="close-btn" aria-label="Close order form">&times;</button>
+      <h3 id="modalTitle">Order Product</h3>
+      <p id="modalDesc" style="color:#555; font-size:0.95rem; margin-bottom: 1rem;">Please fill in your details to place the order.</p>
+      <form id="orderForm" novalidate>
+        <div id="orderStep1">
+          <label for="orderProductName">Product</label><br />
+          <input type="text" id="orderProductName" name="productName" readonly aria-readonly="true" />
+          <label for="orderQuantity">Quantity (kg / piece / bunch)</label><br />
+          <input type="number" id="orderQuantity" name="quantity" min="1" value="1" required aria-required="true"/>
+          <label for="orderName">Your Name</label><br />
+          <input type="text" id="orderName" name="name" placeholder="Full name" required aria-required="true" />
+          <label for="orderPhone">Phone Number</label><br />
+          <input type="tel" id="orderPhone" name="phone" placeholder="Enter phone number" required aria-required="true" pattern="^[0-9\s\-+()]{7,20}$" />
+          <label for="orderLocation">Location / Address</label><br />
+          <textarea id="orderLocation" name="location" rows="3" placeholder="Your location or address" required aria-required="true"></textarea>
+          <button type="button" class="submit-btn" id="calculateTotalBtn">Calculate Total</button>
+        </div>
+        <div id="orderStep2" style="display:none;">
+          <p id="totalPrice" style="font-weight:700; font-size:1.2rem; color:var(--color-primary); user-select:none;"></p>
+          <button type="submit" class="confirm-btn">Confirm Order</button>
+          <button type="button" class="submit-btn" id="backToStep1Btn" style="background-color:#777; margin-top:1rem;">Back</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="confirmationMessage" class="confirmation-message" role="alert" aria-live="polite" style="display:none;"></div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!form.name.value.trim()) {
+        alert('Please enter your name.');
+        form.name.focus();
+        return;
+      }
+      if (!form.email.value.trim()) {
+        alert('Please enter your email.');
+        form.email.focus();
+        return;
+      }
+      if (!form.message.value.trim()) {
+        alert('Please enter your message.');
+        form.message.focus();
+        return;
+      }
+      alert(`Thank you, ${form.name.value.trim()}! Your message has been sent.`);
+      form.reset();
+    });
+
+    const orderModal = document.getElementById('orderModal');
+    const orderForm = document.getElementById('orderForm');
+    const orderProductName = document.getElementById('orderProductName');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    const closeModalBtn = orderModal.querySelector('.close-btn');
+    const productList = document.getElementById('productList');
+    const orderStep1 = document.getElementById('orderStep1');
+    const orderStep2 = document.getElementById('orderStep2');
+    const calculateTotalBtn = document.getElementById('calculateTotalBtn');
+    const backToStep1Btn = document.getElementById('backToStep1Btn');
+    const totalPriceDisplay = document.getElementById('totalPrice');
+
+    let currentPrice = 0;
+
+    // Open modal when order button clicked
+    productList.addEventListener('click', event => {
+      if (event.target.classList.contains('order-btn')) {
+        const card = event.target.closest('.product-card');
+        if (!card) return;
+        const productName = card.dataset.prodName;
+        const price = Number(card.dataset.prodPrice);
+        openOrderModal(productName, price);
+      }
+    });
+
+    function openOrderModal(productName, price) {
+      orderProductName.value = productName;
+      orderForm.quantity.value = 1;
+      orderForm.name.value = '';
+      orderForm.phone.value = '';
+      orderForm.location.value = '';
+      totalPriceDisplay.textContent = '';
+      confirmationMessage.style.display = 'none';
+      orderStep1.style.display = 'block';
+      orderStep2.style.display = 'none';
+      orderModal.classList.add('active');
+      orderModal.focus();
+      currentPrice = price;
+    }
+
+    closeModalBtn.addEventListener('click', closeOrderModal);
+    orderModal.addEventListener('click', e => {
+      if (e.target === orderModal) {
+        closeOrderModal();
+      }
+    });
+    function closeOrderModal() {
+      orderModal.classList.remove('active');
+    }
+
+    function isValidPhone(phone) {
+      const phonePattern = /^[0-9\s\-+()]{7,20}$/;
+      return phonePattern.test(phone);
+    }
+
+    calculateTotalBtn.addEventListener('click', () => {
+      const quantityVal = orderForm.quantity.value.trim();
+      const nameVal = orderForm.name.value.trim();
+      const phoneVal = orderForm.phone.value.trim();
+      const locationVal = orderForm.location.value.trim();
+
+      if (!quantityVal || quantityVal <= 0) {
+        alert("Please enter a valid quantity.");
+        orderForm.quantity.focus();
+        return;
+      }
+      if (!nameVal) {
+        alert('Please enter your name.');
+        orderForm.name.focus();
+        return;
+      }
+      if (!phoneVal) {
+        alert('Please enter your phone number.');
+        orderForm.phone.focus();
+        return;
+      }
+      if (!isValidPhone(phoneVal)) {
+        alert('Please enter a valid phone number.');
+        orderForm.phone.focus();
+        return;
+      }
+      if (!locationVal) {
+        alert('Please enter your location or address.');
+        orderForm.location.focus();
+        return;
+      }
+
+      const total = (currentPrice * Number(quantityVal)).toFixed(2);
+
+      totalPriceDisplay.textContent = `Total Price: ₹${total}`;
+
+      orderStep1.style.display = 'none';
+      orderStep2.style.display = 'block';
+    });
+
+    backToStep1Btn.addEventListener('click', () => {
+      orderStep2.style.display = 'none';
+      orderStep1.style.display = 'block';
+    });
+
+    orderForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const quantityVal = orderForm.quantity.value.trim();
+      const nameVal = orderForm.name.value.trim();
+      const phoneVal = orderForm.phone.value.trim();
+      const locationVal = orderForm.location.value.trim();
+      const productName = orderForm.productName.value;
+      const totalCostText = totalPriceDisplay.textContent;
+
+      closeOrderModal();
+
+      confirmationMessage.textContent =
+        `Thank you, ${nameVal}! Your order for ${quantityVal} unit(s) of "${productName}" has been received.\n${totalCostText}\nWe will contact you shortly at ${phoneVal}.`;
+      confirmationMessage.style.display = 'block';
+
+      setTimeout(() => {
+        confirmationMessage.style.display = 'none';
+      }, 20000);
+
+      orderForm.reset();
+    });
+  </script>
+</body>
+</html>
